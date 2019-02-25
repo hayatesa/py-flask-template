@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 
 def create_app():
-    _app = Flask(__name__)
+    _app = Flask(__name__, static_folder='static')
     _app.config.from_object(config)
 
     db.init_app(_app)
@@ -15,8 +15,10 @@ def create_app():
 
     from rmj.api.demo import demo_bp
     from rmj.api.user import user_bp
+    from rmj.api.page import page_bp
     _app.register_blueprint(demo_bp)
     _app.register_blueprint(user_bp)
+    _app.register_blueprint(page_bp)
     return _app
 
 
