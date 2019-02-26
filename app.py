@@ -5,9 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from config import sqlalchemy_config, log_config, if_create_db
 import os
-import datetime
 import logging
-import sys
 
 # 对应config的PROFILE
 PROFILE = 'dev'
@@ -34,9 +32,11 @@ def __init_db():
 
 def __init_app():
     app.config.from_mapping(sqlalchemy_config(PROFILE))
-    __init_db()
+
     CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 
+
+def __init_route():
     from rmj.api.demo import demo_bp
     from rmj.api.user import user_bp
     from rmj.api.page import page_bp
@@ -45,12 +45,9 @@ def __init_app():
     app.register_blueprint(page_bp)
 
 
-def __init_route():
-    pass
-
-
 if __name__ == '__main__':
     __init_log()
     __init_app()
+    __init_db()
     __init_route()
     app.run(debug=True)
