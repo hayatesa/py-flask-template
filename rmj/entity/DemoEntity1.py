@@ -1,9 +1,10 @@
 # # from rmj.entity.Base import Base
 # import uuid
-# from run import db
+# from app import db
+# from .Base import Base
 #
 #
-# class DemoEntity1(db.Model):
+# class DemoEntity1(Base):
 #     __tablename__ = 'demo_entity'
 #
 #     id = db.Column(db.String(32), primary_key=True)
