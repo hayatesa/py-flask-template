@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 
 def create_app():
-    _app = Flask(__name__, static_folder='static')
+    _app = Flask(__name__, static_folder='templates')
     _app.config.from_object(config)
 
     db.init_app(_app)

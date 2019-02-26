@@ -1,19 +1,23 @@
 from jinja2 import TemplateNotFound
-
 from . import page_bp
-from flask import render_template
+from flask import send_file
 
 
 @page_bp.route('/<page_name>.html', methods=['GET'])
 def page(page_name):
     try:
-        return render_template(page_name + '.html')
+        return send(page_name + '.html')
     except TemplateNotFound:
-        return render_template('404.html')
+        return send('404.html')
     except RuntimeError:
-        return render_template('404.html')
+        return send('404.html')
 
 
 @page_bp.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return send('index.html')
+
+
+def send(file):
+    from run import app
+    return send_file(app.static_folder + '/' + file)

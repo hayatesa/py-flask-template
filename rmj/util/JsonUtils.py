@@ -4,8 +4,8 @@ import json
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-EXCLUDE_FIELDS = []
-EXCLUDE_ALCHEMY_FIELDS = ['metadata', 'query', 'query_class']
+EXCLUDE_FIELDS = ['metadata', 'query', 'query_class']
+EXCLUDE_ALCHEMY_FIELDS = []
 
 
 class AlchemyEncoder(json.JSONEncoder):
