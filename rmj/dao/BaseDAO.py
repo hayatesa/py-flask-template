@@ -1,6 +1,3 @@
-from app import DB
-
-
 class BaseDAO(object):
 
     def __init__(self, table):

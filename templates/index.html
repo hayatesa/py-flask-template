@@ -11,7 +11,7 @@
     <div id="user-app" v-cloak>
         <div>
            <label for="username">用户名</label>
-           <input id="username" @keypress="enterToSearch"  v-model="user.username" placeholder="请输入用户名">
+           <input id="username" @keypress="enterToSearch" v-model="user.username" placeholder="请输入用户名">
            <button @click="searchByUsername">查询</button>
            <button @click="searchUsers">全部</button>
            <span style="color: #ec6969">{{msg}}</span>

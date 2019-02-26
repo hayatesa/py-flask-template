@@ -3,37 +3,44 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from config import sqlalchemy_config, log_config, if_create_db
+from config import sqlalchemy_config, log_config, cors_config
 import os
 import logging
 
-# 对应config的PROFILE
-PROFILE = 'dev'
+# 对应config的profile
+profile = 'dev'
 
 db = SQLAlchemy()
 app = Flask(__name__, static_folder='templates')
 
 
-def __init_log():
-    _log_config = log_config(PROFILE)
-    path = _log_config['path']
-    filename = _log_config['filename']
-    log_file_path = os.path.join(path, filename)
+def make_dir(make_dir_path):
+    path = make_dir_path.strip()
     if not os.path.exists(path):
         os.makedirs(path)
-    logging.basicConfig(filename=log_file_path, format=_log_config['format'])
+    return path
+
+
+def __init_log():
+    _log_config = log_config(profile)
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                        datefmt='%a, %d %b %Y %H:%M:%S',
+                        filename='/home/URL/client/test_log.log',
+                        filemode='a')
 
 
 def __init_db():
-    # if if_create_db(PROFILE):
+    # if if_create_db(profile):
     #     db.create_all()
     db.init_app(app)
 
 
 def __init_app():
-    app.config.from_mapping(sqlalchemy_config(PROFILE))
-
-    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
+    app.config.from_mapping(sqlalchemy_config(profile))
+    cors = cors_config(profile)
+    CORS(app, supports_credentials=cors['supports_credentials'],
+         resources={cors['resources']['path']: {"origins": cors['resources']['origins']}})
 
 
 def __init_route():
@@ -46,7 +53,7 @@ def __init_route():
 
 
 if __name__ == '__main__':
-    __init_log()
+    # __init_log()
     __init_app()
     __init_db()
     __init_route()
