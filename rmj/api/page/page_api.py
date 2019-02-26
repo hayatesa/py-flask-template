@@ -19,5 +19,5 @@ def index():
 
 
 def send(file):
-    from run import app
+    from app import app
     return send_file(app.static_folder + '/' + file)

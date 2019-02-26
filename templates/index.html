@@ -11,12 +11,13 @@
     <div id="user-app" v-cloak>
         <div>
            <label for="username">用户名</label>
-           <input id="username" v-model="user.username" placeholder="请输入用户名">
-           <button @click="findByUsername">查询</button>
+           <input id="username" @keypress="enterToSearch"  v-model="user.username" placeholder="请输入用户名">
+           <button @click="searchByUsername">查询</button>
+           <button @click="searchUsers">全部</button>
            <span style="color: #ec6969">{{msg}}</span>
         </div>
         <ul>
-            <li v-for="item in users" :data-id="item.id">{{item.username}} | {{item.create_time}}</li>
+            <li v-for="item in users" :data-id="item.id">{{item.username}} | {{item.createTime}}</li>
         </ul>
     </div>
 <script src="js/jquery.min.js"></script>
