@@ -1,6 +1,6 @@
 from . import demo_bp
-from rmj.entity.User import User
-from rmj.util.JsonUtils import AlchemyEncoder
+from app.entity.User import User
+from app.util.JsonUtils import AlchemyEncoder
 import json
 
 

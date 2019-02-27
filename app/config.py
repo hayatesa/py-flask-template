@@ -15,7 +15,7 @@ PROFILE = {
         'sqlalchemy': {
             'SQLALCHEMY_DATABASE_URI': 'mysql://dev:dev@119.29.94.246:3306/test_db?charset=utf8',
             'SQLALCHEMY_TRACK_MODIFICATIONS': True,
-            'SQLALCHEMY_ECHO': False
+            'SQLALCHEMY_ECHO': True
         },
         'log': {
             'path': 'D:/AppLog',

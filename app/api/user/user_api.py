@@ -1,6 +1,6 @@
 from . import user_bp
-from rmj.entity.User import User
-from rmj.util.Resp import mk_resp
+from app.entity.User import User
+from app.util.Resp import mk_resp
 from app import logger
 
 

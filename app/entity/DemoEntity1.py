@@ -1,4 +1,4 @@
-# # from rmj.entity.Base import Base
+# # from app.entity.Base import Base
 # import uuid
 # from app import db
 # from .Base import Base

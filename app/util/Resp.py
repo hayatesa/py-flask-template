@@ -1,4 +1,4 @@
-from rmj.util.JsonUtils import to_json
+from app.util.JsonUtils import to_json
 from datetime import datetime
 from flask import Response
 
