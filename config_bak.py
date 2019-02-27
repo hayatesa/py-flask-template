@@ -1,30 +1,23 @@
-profile = 'dev'
-
 PROFILE = {
     'dev': {
-        'web': {
-            'cors': {
-                'allow': True,
-                'origins': '*',
-                'path': ''
-            }
-        },
-        'db': {
-            'create': True,
-        },
+        'init_db': True,
         'sqlalchemy': {
             'SQLALCHEMY_DATABASE_URI': 'mysql://dev:dev@119.29.94.246:3306/test_db?charset=utf8',
             'SQLALCHEMY_TRACK_MODIFICATIONS': True,
-            'SQLALCHEMY_ECHO': False
+            'SQLALCHEMY_ECHO': True
         },
         'log': {
             'path': 'D:/AppLog',
             'filename': 'app.log',
-            'format': '%(asctime)s %(levelname)s %(filename)s[%(lineno)d] %(funcName)s: %(message)s',
-            'date_fmt': '%Y-%m-%d %H:%M:%S',
-            'filemode': 'a'
+            'format': '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s'
         },
-
+        'cors': {
+            'supports_credentials': True,
+            'resources': {
+                'path': r'/api/*',
+                'origins': '*'
+            }
+        }
     },
     'prod': {
         'sqlalchemy': {
@@ -44,17 +37,17 @@ PROFILE = {
 }
 
 
-def sqlalchemy_config():
-    return PROFILE[profile].get('sqlalchemy')
+def sqlalchemy_config(profile):
+    return PROFILE[profile]['sqlalchemy']
 
 
-def log_config():
-    return PROFILE[profile].get('log')
+def log_config(profile):
+    return PROFILE[profile]['log']
 
 
-def if_create_db():
-    return PROFILE[profile].get('init_db')
+def if_create_db(profile):
+    return PROFILE[profile]['init_db']
 
 
-def web_config():
-    return PROFILE[profile].get('web')
+def cors_config(profile):
+    return PROFILE[profile]['cors']

@@ -1,10 +1,12 @@
 from . import user_bp
 from rmj.entity.User import User
 from rmj.util.Resp import mk_resp
+from app import logger
 
 
 @user_bp.route('/', methods=['GET'])
 def find_list():
+    logger.info('List users')
     return mk_resp(data=User.query.all())
 
 
