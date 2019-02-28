@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from app.config import sqlalchemy_config, log_config, web_config
+from app.config import sqlalchemy_config, web_config
 import os
 import sys
 import time
@@ -10,22 +10,21 @@ from yaml import load
 
 start_time = time.time()
 
+CONTEXT_PATH = sys.path[0]  # 应用上下文路径
 
-def make_dir(dir_path):
-    _path = dir_path.strip()
-    if not os.path.exists(_path):
-        os.makedirs(_path)
-    #     logging.info('Make directory: ' + _path)
-    # else:
-    #     logging.info(_path + 'already exists.')
-    return _path
+RESOURCES_FOLDER = 'resources'  # 资源文件夹
+RESOURCES_PATH = os.path.join(CONTEXT_PATH, RESOURCES_FOLDER)  # 资源文件路径
+
+LOG_FILE_NAME = 'log.yml'  # 日志配置文件名
+LOG_CONF_PATH = os.path.join(RESOURCES_PATH, LOG_FILE_NAME)  # 日志配置文件路径
+
+BANNER_FILE_NAME = 'banner.txt'  # banner文本文件名
+BANNER_PATH = os.path.join(RESOURCES_PATH, BANNER_FILE_NAME)  # banner路径
 
 
 def __create_logger__():
-    log_conf_path = '%s/log.yml' % sys.path[0]
-
-    if os.path.exists(log_conf_path):
-        with open(log_conf_path) as f:
+    if os.path.exists(LOG_CONF_PATH):
+        with open(LOG_CONF_PATH) as f:
             conf = load(f)
         logging.config.dictConfig(conf)
 
@@ -67,9 +66,9 @@ def __assemble_blueprint__(flask_app):
 
 
 def message():
-    banner_path = '%s/banner.txt' % sys.path[0]
-    if os.path.exists(banner_path):
-        with open(banner_path) as f:
+    if os.path.exists(BANNER_PATH):
+        logger.info('Loading banner.txt from')
+        with open(BANNER_PATH) as f:
             logger.info(f.read())
     logger.info('Application launched in %.2f Seconds.' % (end_time - start_time))
 

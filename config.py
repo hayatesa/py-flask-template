@@ -6,11 +6,6 @@ PROFILE = {
             'SQLALCHEMY_TRACK_MODIFICATIONS': True,
             'SQLALCHEMY_ECHO': True
         },
-        'log': {
-            'path': 'D:/AppLog',
-            'filename': 'app.log',
-            'format': '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s'
-        },
         'cors': {
             'supports_credentials': True,
             'resources': {
@@ -27,22 +22,12 @@ PROFILE = {
             'SQLALCHEMY_POOL_SIZE': 50,
             'SQLALCHEMY_POOL_TIMEOUT': 20
         },
-        'log': {
-            'path': '',
-            'filename': '',
-            'format': ''
-        },
-
     }
 }
 
 
 def sqlalchemy_config(profile):
     return PROFILE[profile]['sqlalchemy']
-
-
-def log_config(profile):
-    return PROFILE[profile]['log']
 
 
 def if_create_db(profile):
