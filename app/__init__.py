@@ -52,7 +52,7 @@ def __create_app__():
     path = ('/*' if cors.get('path') is None else cors.get('path')) if supports_credentials else ''
     CORS(flask_app, supports_credentials=supports_credentials,
          resources={path: {"origins": origins}})
-
+    __after_request__(flask_app)
     return flask_app
 
 
@@ -63,6 +63,12 @@ def __assemble_blueprint__(flask_app):
     flask_app.register_blueprint(demo_bp)
     flask_app.register_blueprint(user_bp)
     flask_app.register_blueprint(page_bp)
+
+
+def __register_api__():
+    from app.api.user.user_route import ns as user_ns
+    from app.api.user import user_api
+    user_api.add_namespace(user_ns)
 
 
 def __after_request__(flask_app):
@@ -88,8 +94,8 @@ def message():
 logger = __create_logger__()
 app = __create_app__()
 db = __create_db__(app)
+__register_api__()
 __assemble_blueprint__(app)
-__after_request__(app)
 
 end_time = time.time()
 message()
