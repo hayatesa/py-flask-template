@@ -8,6 +8,8 @@ import time
 import logging.config
 from yaml import load
 
+APP_CONFIG = {}
+
 start_time = time.time()
 
 CONTEXT_PATH = sys.path[0]  # 应用上下文路径
@@ -15,7 +17,7 @@ CONTEXT_PATH = sys.path[0]  # 应用上下文路径
 RESOURCES_FOLDER = 'resources'  # 资源文件夹
 RESOURCES_PATH = os.path.join(CONTEXT_PATH, RESOURCES_FOLDER)  # 资源文件路径
 
-LOG_FILE_NAME = 'log.yml'  # 日志配置文件名
+LOG_FILE_NAME = 'log/log.yml'  # 日志配置文件名
 LOG_CONF_PATH = os.path.join(RESOURCES_PATH, LOG_FILE_NAME)  # 日志配置文件路径
 
 BANNER_FILE_NAME = 'banner.txt'  # banner文本文件名
@@ -60,15 +62,21 @@ def __assemble_blueprint__(flask_app):
     from app.api.demo import demo_bp
     from app.api.user import user_bp
     from app.api.page import page_bp
+    from app.api.test import test_bp
     flask_app.register_blueprint(demo_bp)
     flask_app.register_blueprint(user_bp)
     flask_app.register_blueprint(page_bp)
+    flask_app.register_blueprint(test_bp)
 
 
 def __register_api__():
     from app.api.user.user_route import ns as user_ns
     from app.api.user import user_api
     user_api.add_namespace(user_ns)
+
+    from app.api.test.route import ns as test_ns
+    from app.api.test import test_api
+    test_api.add_namespace(test_ns)
 
 
 def __after_request__(flask_app):
