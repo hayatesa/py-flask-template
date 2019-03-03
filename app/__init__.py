@@ -25,7 +25,7 @@ def __load_config__():
     app_config = {}
     if os.path.exists(CONFIG_FILE_PATH):
         try:
-            with open(CONFIG_FILE_PATH) as f:
+            with open(CONFIG_FILE_PATH, encoding='UTF-8') as f:
                 conf = load(f)
                 app_config = dict(app_config, **conf) if conf else app_config
         except Exception as e:
@@ -41,7 +41,7 @@ def __load_config__():
         profile_path = os.path.join(RESOURCES_PATH, 'config/application-%s.yml' % profile)
         if os.path.exists(profile_path):
             try:
-                with open(profile_path) as f:
+                with open(profile_path, encoding='UTF-8') as f:
                     conf = load(f)
                     app_config = dict(app_config, **conf) if conf else app_config
             except Exception as e:
@@ -56,7 +56,7 @@ def __load_config__():
 def __create_logger__():
     log_conf = {}
     if os.path.exists(LOG_CONF_PATH):
-        with open(LOG_CONF_PATH) as f:
+        with open(LOG_CONF_PATH, encoding='UTF-8') as f:
             log_conf = load(f)
             log_conf['version'] = log_conf.get('version') or 1
 
@@ -66,7 +66,7 @@ def __create_logger__():
         profile_path = os.path.join(RESOURCES_PATH, 'log/log-%s.yml' % profile)
         if os.path.exists(profile_path):
             try:
-                with open(profile_path) as f:
+                with open(profile_path, encoding='UTF-8') as f:
                     conf = load(f)
                     log_conf = dict(log_conf, **conf) if conf else log_conf
             except Exception as e:
@@ -124,7 +124,7 @@ def __register_api__():
 def message():
     if os.path.exists(BANNER_PATH):
         logger.info('Loading banner.txt from %s' % BANNER_PATH)
-        with open(BANNER_PATH) as f:
+        with open(BANNER_PATH, encoding='UTF-8') as f:
             logger.info(f.read())
     logger.info('Application launched in %.2f Seconds.' % (end_time - start_time))
 

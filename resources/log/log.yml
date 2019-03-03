@@ -25,4 +25,4 @@ loggers:
       - file
     level: 10
 disable_existing_loggers: true
-version: 1
+version: 1  # 默认且只能为1
