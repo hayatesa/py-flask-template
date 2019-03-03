@@ -1,8 +1,7 @@
-from flask import request, abort
+from flask import request
 
-from app.exception.TokenException import TokenException
 from app.service.UserService import user_service
-from app.util.Resp import success, failure
+from app.util.Resp import success
 from app.util import JwtUtils
 from . import auth_bp
 from app.auth import basic_auth, token_auth

@@ -17,15 +17,20 @@ def verify_password(username, password):
     验证用户名密码
     :param username:  用户名 来自URL组件或POST请求参数
     :param password: 密码 来自URL组件或POST请求参数
-    :return:
+    :return: boolean
     """
-    _username = username or request.form['username']
-    _password = password or request.form['password']
+    _username = username or request.form.get('username')
+    _password = password or request.form.get('password')
+    if not _username:
+        abort(401, **{'description': '认证失败: 请提供用户名'})
+    if not _password:
+        abort(401, **{'description': '认证失败: 请提供密码'})
+
     user_info = user_service.find_by_username(_username)
-    if user_info is None:
-        abort(401, **{'description': '认证失败, 用户不存在'})
+    if not user_info:
+        abort(401, **{'description': '认证失败: 用户不存在'})
     if not check_password_hash(user_info.password, _password):
-        abort(401, **{'description': '认证失败, 密码错误'})
+        abort(401, **{'description': '认证失败: 密码错误'})
     user_info.lastAccessTime = datetime.datetime.now()
     user_service.update(user_info)
     return True
@@ -34,14 +39,14 @@ def verify_password(username, password):
 @token_auth.verify_token
 def verify_token(token):
     if not token:
-        abort(403, **{'description': '授权失败, Token缺失'})
+        abort(401, **{'description': '禁止访问: 令牌缺失'})
 
     try:
         payload = JwtUtils.decode_auth_token(token)
         if not JwtUtils.is_valid_token(payload):
-            raise TokenException('授权失败, Token无效')
+            raise TokenException('禁止访问: 令牌无效')
         if JwtUtils.is_token_expired(payload['exp']):
-            raise TokenException('授权失败, Token过期')
+            abort(401, **{'description': '禁止访问: 令牌过期'})
     except TokenException as e:
-        abort(403, **{'description': e.message})
+        abort(401, **{'description': e.message})
     return True

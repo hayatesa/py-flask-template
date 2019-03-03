@@ -4,7 +4,6 @@ from flask_cors import CORS
 import os
 import sys
 import time
-import traceback
 import logging.config
 from yaml import load
 
@@ -14,41 +13,52 @@ CONTEXT_PATH = sys.path[0]  # 应用上下文路径
 
 RESOURCES_PATH = os.path.join(CONTEXT_PATH, 'resources')  # 资源文件路径
 
-CONFIG_FILE_PATH = os.path.join(RESOURCES_PATH, 'config/application.yml')  # 应用配置文件路径
+CONF_FILE_INFO = {'path': 'config', 'filename': 'application', 'suffix': '.yml'}
+CONFIG_FILE_PATH = os.path.join(RESOURCES_PATH, '%s/%s%s' % (CONF_FILE_INFO['path'],
+                                                             CONF_FILE_INFO['filename'],
+                                                             CONF_FILE_INFO['suffix']))  # 应用配置文件路径
 
-LOG_CONF_PATH = os.path.join(RESOURCES_PATH, 'log/log.yml')  # 日志配置文件路径
+LOG_CONF_FILE_INFO = {'path': 'log', 'filename': 'log', 'suffix': '.yml'}
+LOG_CONF_PATH = os.path.join(RESOURCES_PATH, '%s/%s%s' % (LOG_CONF_FILE_INFO['path'],
+                                                          LOG_CONF_FILE_INFO['filename'],
+                                                          LOG_CONF_FILE_INFO['suffix']))  # 日志配置文件路径
 
 BANNER_PATH = os.path.join(RESOURCES_PATH, 'banner.txt')  # banner路径
 
 
 def __load_config__():
     app_config = {}
+    _logger = logging.getLogger()
+    _logger.setLevel(logging.DEBUG)
     if os.path.exists(CONFIG_FILE_PATH):
         try:
             with open(CONFIG_FILE_PATH, encoding='UTF-8') as f:
                 conf = load(f)
                 app_config = dict(app_config, **conf) if conf else app_config
         except Exception as e:
-            logging.getLogger().error(e)
+            _logger.error(e)
             sys.exit(1)
     else:
-        logging.getLogger().error('无法找到文件%s' % CONFIG_FILE_PATH)
+        _logger.error('无法找到文件%s' % CONFIG_FILE_PATH)
         sys.exit(1)
 
     profile = app_config.get('profile')
     # 如果指定了profile, 加载profile配置文件
     if profile:
-        profile_path = os.path.join(RESOURCES_PATH, 'config/application-%s.yml' % profile)
+        profile_path = os.path.join(RESOURCES_PATH, '%s/%s-%s%s' % (CONF_FILE_INFO['path'],
+                                                                    CONF_FILE_INFO['filename'],
+                                                                    profile,
+                                                                    CONF_FILE_INFO['suffix']))
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, encoding='UTF-8') as f:
                     conf = load(f)
                     app_config = dict(app_config, **conf) if conf else app_config
             except Exception as e:
-                logging.getLogger().error(e)
+                _logger.error(e)
                 sys.exit(1)
         else:
-            logging.getLogger().warning('无法找到文件%s, 请检查profile拼写是否有误' % profile_path)
+            _logger.warning('无法找到文件%s, 请检查profile拼写是否有误' % profile_path)
 
     return app_config
 
@@ -63,7 +73,10 @@ def __create_logger__():
     profile = APPLICATION_CONFIG.get('profile')
     # 如果指定了profile, 加载profile配置文件
     if profile:
-        profile_path = os.path.join(RESOURCES_PATH, 'log/log-%s.yml' % profile)
+        profile_path = os.path.join(RESOURCES_PATH, '%s/%s-%s%s' % (LOG_CONF_FILE_INFO['path'],
+                                                                    LOG_CONF_FILE_INFO['filename'],
+                                                                    profile,
+                                                                    LOG_CONF_FILE_INFO['suffix']))
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, encoding='UTF-8') as f:
@@ -87,7 +100,10 @@ def __create_db__(flask_app):
 
 
 def __create_app__():
-    flask_app = Flask(__name__, static_folder='../templates')
+    flask_app = Flask(__name__, static_folder=os.path.join(
+        CONTEXT_PATH,
+        APPLICATION_CONFIG['server'].get('static_folder', 'templates')
+    ))
     flask_app.config.from_mapping(APPLICATION_CONFIG.get('sqlalchemy', {}))
     __init_cors__(flask_app)
     return flask_app
@@ -123,7 +139,7 @@ def __register_api__():
 
 def message():
     if os.path.exists(BANNER_PATH):
-        logger.info('Loading banner.txt from %s' % BANNER_PATH)
+        logger.info('Load banner.txt from %s' % BANNER_PATH)
         with open(BANNER_PATH, encoding='UTF-8') as f:
             logger.info(f.read())
     logger.info('Application launched in %.2f Seconds.' % (end_time - start_time))
