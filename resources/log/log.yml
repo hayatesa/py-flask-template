@@ -25,4 +25,4 @@ loggers:
       - file
     level: 10
 disable_existing_loggers: true
-version: 1.0
+version: 1

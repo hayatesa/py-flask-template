@@ -6,7 +6,7 @@ PROFILE = {
             'cors': {
                 'allow': True,
                 'origins': '*',
-                'path': ''
+                'path': '/*'
             }
         },
         'db': {

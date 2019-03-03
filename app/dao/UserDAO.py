@@ -8,7 +8,7 @@ class UserDAO(BaseDAO):
         super().__init__(User)
 
     def find_by_username(self, username):
-        return User.query.filter(User.username.like(r'%{}%'.format(username))).all()
+        return User.query.filter(User.username == username, User.isDeleted == 0).all()
 
 
 user_dao = UserDAO()

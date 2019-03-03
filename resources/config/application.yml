@@ -1,23 +1,20 @@
-version: 1.2.0.0301_base
-
-profile: dev
-
+version: 1.3.0.0303_base
+profile: local
 server:
   static_folder: /templates
-  context-path: /api/${version}
-  port: 5000
+  context_path: /api/1.3.0.0303_base
   cors:
     allow: true
-    origins: *
+    origins: '*'
     path: /api/*
 
 sqlalchemy:
   SQLALCHEMY_DATABASE_URI: mysql://dev:dev@119.29.94.246:3306/test_db?charset=utf8
   SQLALCHEMY_TRACK_MODIFICATIONS: true
-  SQLALCHEMY_ECHO: True
-  SQLALCHEMY_POOL_SIZE: 50,
+  SQLALCHEMY_ECHO: true
+  SQLALCHEMY_POOL_SIZE: 50
   SQLALCHEMY_POOL_TIMEOUT: 20
-  SQLALCHEMY_RECORD_QUERIES: ''
-  SQLALCHEMY_NATIVE_UNICODE: ''
-  SQLALCHEMY_POOL_RECYCLE: ''
-  SQLALCHEMY_MAX_OVERFLOW: ''
+  SQLALCHEMY_RECORD_QUERIES:
+  SQLALCHEMY_NATIVE_UNICODE:
+  SQLALCHEMY_POOL_RECYCLE:
+  SQLALCHEMY_MAX_OVERFLOW:

@@ -5,7 +5,8 @@ class User(db.Model):
     __tablename__ = 'user'
     id = db.Column('id', db.String(32), primary_key=True)
     username = db.Column('username', db.String(64))
-    password = db.Column('password', db.String(64))
+    password = db.Column('password', db.String(128))
+    lastAccessTime = db.Column('last_access_time', db.DateTime)
     createTime = db.Column('create_time', db.DateTime)
     isDeleted = db.Column('is_deleted', db.Boolean)
 
