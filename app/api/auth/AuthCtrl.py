@@ -1,5 +1,5 @@
 from flask import request
-
+from app.exception.AuthException import AuthException
 from app.service.UserService import user_service
 from app.util.Resp import success
 from app.util import JwtUtils
@@ -21,3 +21,9 @@ def authenticate():
 @token_auth.login_required
 def identify():
     return success()
+
+
+@auth_bp.route('/forbidden', methods=['get'])
+@token_auth.login_required
+def forbidden():
+    raise AuthException('无权限')

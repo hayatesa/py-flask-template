@@ -1,3 +1,5 @@
+from app.exception.AuthException import AuthException
+
 from app import app
 from app.util.Resp import failure
 
@@ -25,3 +27,8 @@ def not_found(error):
 @app.errorhandler(500)
 def not_found(error):
     return failure(message=error.description, status_code=error.code)
+
+
+@app.errorhandler(AuthException)
+def not_found(e):
+    return failure(message=e.message)

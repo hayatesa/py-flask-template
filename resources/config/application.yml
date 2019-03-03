@@ -18,3 +18,8 @@ sqlalchemy:
   SQLALCHEMY_NATIVE_UNICODE:
   SQLALCHEMY_POOL_RECYCLE:
   SQLALCHEMY_MAX_OVERFLOW:
+jwt:
+  secret_key: ft@4&iP!_  # Token密钥
+  ttl: 60*60*24  # Token有效期(单位: 秒)
+  algorithm: HS256  # Token加密算法
+  token_prefix: Bearer  # Token前缀

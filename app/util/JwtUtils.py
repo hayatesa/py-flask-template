@@ -2,10 +2,12 @@ import jwt
 import datetime
 import time
 from app.exception.TokenException import TokenException
+from app import APPLICATION_CONFIG
 
-SECRET_KEY = 'py@test!_'
-ALGORITHM = 'HS256'
-HEADER_PREFIX = 'Bearer '
+SECRET_KEY = APPLICATION_CONFIG.get('secret_key', '')
+TTL = APPLICATION_CONFIG.get('ttl', 1800)
+ALGORITHM = APPLICATION_CONFIG.get('algorithm', 'HS256')
+TOKEN_PREFIX = '%s ' % APPLICATION_CONFIG.get('token_prefix') if APPLICATION_CONFIG.get('token_prefix') else ''
 
 
 def encode_auth_token(user_id, username):
@@ -14,7 +16,7 @@ def encode_auth_token(user_id, username):
     :return: token string
     """
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=0, seconds=10),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=TTL),
         'iat': datetime.datetime.utcnow(),
         'iss': 'ken',
         'data': {
@@ -22,7 +24,7 @@ def encode_auth_token(user_id, username):
             'username': username
         }
     }
-    return HEADER_PREFIX + jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM).decode('utf-8')
+    return TOKEN_PREFIX + jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM).decode('utf-8')
 
 
 def decode_auth_token(auth_token):
@@ -49,17 +51,19 @@ def is_token_expired(expiration):
     return time.time() - expiration >= 0
 
 
-def extract(header):
-    if header.find(HEADER_PREFIX) != 0:
-        return header
+def extract(token_in_header):
+    if not TOKEN_PREFIX:
+        return token_in_header
+    if token_in_header.find(TOKEN_PREFIX) != 0:
+        return token_in_header
 
-    if not header.strip():
+    if not token_in_header.strip():
         raise TokenException('Authorization header cannot be blank.')
 
-    if len(header) < len(HEADER_PREFIX):
+    if len(token_in_header) < len(TOKEN_PREFIX):
         raise TokenException('Invalid authorization header size.')
 
-    return header[len(HEADER_PREFIX):]
+    return token_in_header[len(TOKEN_PREFIX):]
 
 # encode为加密函数，decode为解密函数(HS256)
 
