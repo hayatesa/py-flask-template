@@ -15,20 +15,12 @@ auth_model = auth_api.model('auth', {
 })
 
 
-result_model = auth_api.model('result', {
-    'success': fields.Boolean(),
-    'message': fields.String(),
-    'data': fields.String()
-})
-
-
 @auth_api.route('')
 class AuthApi(Resource):
 
     @basic_auth.login_required
     @auth_api.doc(security='basicAuth')
     @auth_api.expect(auth_model)
-    @auth_api.marshal_with(result_model)
     def post(self):
         username_auth = request.authorization.get('username') if request.authorization else None
         user = user_service.find_by_username(username_auth or request.json['username'])
@@ -40,7 +32,7 @@ class AuthIdentifyApi(Resource):
 
     @token_auth.login_required
     @auth_api.doc(security='bearerAuth')
-    def identify(self):
+    def get(self):
         return success()
 
 

@@ -5,7 +5,7 @@ from app.exception.TokenException import TokenException
 from app import APPLICATION_CONFIG
 
 SECRET_KEY = APPLICATION_CONFIG.get('secret_key', '')
-TTL = APPLICATION_CONFIG.get('ttl', 1800)
+TTL = APPLICATION_CONFIG['jwt'].get('ttl', 1800)
 ALGORITHM = APPLICATION_CONFIG.get('algorithm', 'HS256')
 TOKEN_PREFIX = ('%s ' % APPLICATION_CONFIG['jwt'].get('token_prefix')) if APPLICATION_CONFIG['jwt'].get('token_prefix') else ''
 
@@ -18,7 +18,7 @@ def encode_auth_token(user_id, username):
     payload = {
         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=TTL),
         'iat': datetime.datetime.utcnow(),
-        'iss': 'ken',
+        'iss': 'dev',
         'data': {
             'id': user_id,
             'username': username

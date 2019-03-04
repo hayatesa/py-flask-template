@@ -19,7 +19,6 @@ def verify_password(username, password):
     :param password: 密码 来自URL组件或POST请求参数
     :return: boolean
     """
-    r = request
     data = request.json
     _username = username or data.get('username')
     _password = password or data.get('password')

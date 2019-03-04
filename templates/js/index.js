@@ -1,5 +1,6 @@
-const SEARCH_USER_BY_USERNAME_URL = '/api/user/username';
-const SEARCH_USERS_URL = '/api/user';
+const VERSION = 'v1.3.2';
+const SEARCH_USER_BY_USERNAME_URL = `/api/${VERSION}/sys/user/username`;
+const SEARCH_USERS_URL = `/api/${VERSION}/sys/user/list`;
 
 new Vue({
     el: '#user-app',
@@ -45,7 +46,7 @@ function searchByUsername() {
     if (!this.checkSearchInput()) return;
     fetch(`${SEARCH_USER_BY_USERNAME_URL}/${_this.user.username}`)
         .then(resp => resp.json())
-        .then(data => _this.users = data.data)
+        .then(data => _this.users = [data.data])
 
 }
 

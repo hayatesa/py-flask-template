@@ -3,7 +3,7 @@ from app.util.Resp import success
 from app import logger
 from app.service.UserService import user_service
 
-user_api = Namespace('user', description='Token API')
+user_api = Namespace('user', description='User API')
 
 
 @user_api.route('/list')
@@ -30,7 +30,8 @@ class UserApi(Resource):
         return success()
 
 
-@user_api.route('/<string:username>')
+@user_api.route('/username/<string:username>')
+@user_api.param('username')
 class UserApi(Resource):
     def get(self, username):
         logger.info('List users.')

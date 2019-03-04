@@ -1,5 +1,5 @@
 from uuid import uuid1
-from app.entity.User import User
+from app.vo.UserVO import UserVO
 from app.dao.UserDAO import user_dao
 from . import session_commit
 
