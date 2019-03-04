@@ -32,3 +32,8 @@ def not_found(error):
 @app.errorhandler(AuthException)
 def not_found(e):
     return failure(message=e.message)
+
+
+@app.errorhandler(Exception)
+def not_found(e):
+    return failure(message='Something Wrong. Please Try again.')

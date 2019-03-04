@@ -119,12 +119,10 @@ def __init_cors__(flask_app):
 
 
 def __assemble_blueprint__(flask_app):
-    from app.api.demo import demo_bp
     from app.api.auth import auth_bp
     from app.api.user import user_bp
     from app.api.page import page_bp
     from app.api.test import test_bp
-    flask_app.register_blueprint(demo_bp)
     flask_app.register_blueprint(auth_bp)
     flask_app.register_blueprint(user_bp)
     flask_app.register_blueprint(page_bp)

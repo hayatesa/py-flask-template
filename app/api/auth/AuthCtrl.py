@@ -1,4 +1,6 @@
 from flask import request
+from flask_restplus import Namespace
+
 from app.exception.AuthException import AuthException
 from app.service.UserService import user_service
 from app.util.Resp import success
@@ -7,6 +9,8 @@ from . import auth_bp
 from app.auth import basic_auth, token_auth
 
 AUTHORIZATION = 'Authorization'
+
+token_api = Namespace()
 
 
 @auth_bp.route('/token', methods=['POST', 'GET'])
@@ -27,3 +31,9 @@ def identify():
 @token_auth.login_required
 def forbidden():
     raise AuthException('无权限')
+
+
+@auth_bp.route('/error', methods=['get'])
+@token_auth.login_required
+def error():
+    raise Exception()
