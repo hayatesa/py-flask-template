@@ -20,17 +20,17 @@ class Resp:
 
 
 def mk_resp(success=True, message=DEFAULT_MESSAGE, data=None, status_code=200):
-    resp = Response(Resp(success, message, data).to_json(), MIME_TYPE)
+    resp = Response(Resp(success, message, data).to_json(), mimetype=MIME_TYPE)
     resp.status_code = status_code
     return resp
 
 
 def success(message=DEFAULT_MESSAGE, data=None):
-    resp = Response(Resp(True, message, data).to_json(), MIME_TYPE)
+    resp = Response(Resp(True, message, data).to_json(), mimetype=MIME_TYPE)
     return resp
 
 
 def failure(message=DEFAULT_MESSAGE, data=None, status_code=200):
-    resp = Response(Resp(False, message, data).to_json(), MIME_TYPE)
+    resp = Response(Resp(False, message, data).to_json(), mimetype=MIME_TYPE)
     resp.status_code = status_code
     return resp

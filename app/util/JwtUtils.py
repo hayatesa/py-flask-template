@@ -7,7 +7,7 @@ from app import APPLICATION_CONFIG
 SECRET_KEY = APPLICATION_CONFIG.get('secret_key', '')
 TTL = APPLICATION_CONFIG.get('ttl', 1800)
 ALGORITHM = APPLICATION_CONFIG.get('algorithm', 'HS256')
-TOKEN_PREFIX = '%s ' % APPLICATION_CONFIG.get('token_prefix') if APPLICATION_CONFIG.get('token_prefix') else ''
+TOKEN_PREFIX = ('%s ' % APPLICATION_CONFIG['jwt'].get('token_prefix')) if APPLICATION_CONFIG['jwt'].get('token_prefix') else ''
 
 
 def encode_auth_token(user_id, username):

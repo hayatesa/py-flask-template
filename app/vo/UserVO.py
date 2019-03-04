@@ -1,10 +1,13 @@
-class UserVO:
+from app.mixin.ConvertMixin import ConvertMixin
 
-    def __init__(self, id, username, reg_time):
+
+class UserVO(object, ConvertMixin):
+
+    def __init__(self, id, username, last_access_time):
         self.id = id
         self.username = username
-        self.regTime = reg_time
+        self.lassAccessTime = last_access_time
 
     @staticmethod
-    def convert(source, target):
-        return dict()
+    def convert(source):
+        return UserVO(source.id, source.username, source.lastAccessTime)

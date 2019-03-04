@@ -5,7 +5,7 @@ import os
 import sys
 import time
 import logging.config
-from yaml import load
+from yaml import safe_load
 
 start_time = time.time()
 
@@ -33,7 +33,7 @@ def __load_config__():
     if os.path.exists(CONFIG_FILE_PATH):
         try:
             with open(CONFIG_FILE_PATH, encoding='UTF-8') as f:
-                conf = load(f)
+                conf = safe_load(f)
                 app_config = dict(app_config, **conf) if conf else app_config
         except Exception as e:
             _logger.error(e)
@@ -52,7 +52,7 @@ def __load_config__():
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, encoding='UTF-8') as f:
-                    conf = load(f)
+                    conf = safe_load(f)
                     app_config = dict(app_config, **conf) if conf else app_config
             except Exception as e:
                 _logger.error(e)
@@ -67,7 +67,7 @@ def __create_logger__():
     log_conf = {}
     if os.path.exists(LOG_CONF_PATH):
         with open(LOG_CONF_PATH, encoding='UTF-8') as f:
-            log_conf = load(f)
+            log_conf = safe_load(f)
             log_conf['version'] = log_conf.get('version') or 1
 
     profile = APPLICATION_CONFIG.get('profile')
@@ -80,7 +80,7 @@ def __create_logger__():
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, encoding='UTF-8') as f:
-                    conf = load(f)
+                    conf = safe_load(f)
                     log_conf = dict(log_conf, **conf) if conf else log_conf
             except Exception as e:
                 logging.getLogger().error(e)
@@ -120,11 +120,11 @@ def __init_cors__(flask_app):
 
 def __assemble_blueprint__(flask_app):
     from app.api.auth import auth_bp
-    from app.api.user import user_bp
+    from app.api.sys import sys_bp
     from app.api.page import page_bp
     from app.api.test import test_bp
     flask_app.register_blueprint(auth_bp)
-    flask_app.register_blueprint(user_bp)
+    flask_app.register_blueprint(sys_bp)
     flask_app.register_blueprint(page_bp)
     flask_app.register_blueprint(test_bp)
 

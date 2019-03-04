@@ -1,3 +1,4 @@
+from uuid import uuid1
 from app.entity.User import User
 from app.dao.UserDAO import user_dao
 from . import session_commit
@@ -7,10 +8,10 @@ class UserService:
 
     @staticmethod
     def find_list():
-        return User.query.all()
+        return user_dao.list()
 
     @staticmethod
-    def find_page(self):
+    def find_page():
         return
 
     @staticmethod
@@ -28,6 +29,22 @@ class UserService:
     def update(user):
         user_dao.update(user)
         session_commit()
+
+    @staticmethod
+    def add(user):
+        user.id = uuid1()
+        user_dao.add(user)
+        session_commit()
+
+    @staticmethod
+    def delete(user_id):
+        user = user_dao.find(user_id)
+        if not user:
+            return
+        user.isDeleted = 1
+        user_dao.add(user)
+        session_commit()
+        return user
 
 
 user_service = UserService()

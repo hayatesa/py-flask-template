@@ -1,7 +1,24 @@
+from flask_restplus import model, fields
+
 from app.exception.AuthException import AuthException
 
-from app import app
+from app import app, APPLICATION_CONFIG
 from app.util.Resp import failure
+
+context_path = APPLICATION_CONFIG['server'].get('context_path', '')
+version = APPLICATION_CONFIG.get('version')
+
+authorizations = {
+    'basicAuth': {
+        'type': 'basic',
+        'in': 'header',
+    },
+    'bearerAuth': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
 
 
 @app.errorhandler(400)

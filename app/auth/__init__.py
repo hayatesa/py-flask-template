@@ -19,8 +19,10 @@ def verify_password(username, password):
     :param password: 密码 来自URL组件或POST请求参数
     :return: boolean
     """
-    _username = username or request.form.get('username')
-    _password = password or request.form.get('password')
+    r = request
+    data = request.json
+    _username = username or data.get('username')
+    _password = password or data.get('password')
     if not _username:
         abort(401, **{'description': '认证失败: 请提供用户名'})
     if not _password:
