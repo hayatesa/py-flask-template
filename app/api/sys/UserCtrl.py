@@ -1,38 +1,35 @@
-from flask_restplus import Namespace, Resource
 from app.util.Resp import success
 from app import logger
 from app.service.UserService import user_service
-
-user_api = Namespace('user', description='User API')
-
-
-@user_api.route('/list')
-class UserListApi(Resource):
-    def get(self):
-        logger.info('List users.')
-        return success(data=user_service.find_list())
+from . import sys_bp as api
 
 
-@user_api.route('/<string:id>')
-@user_api.param('id', 'The task identifier')
-class UserApi(Resource):
-    def get(self, id):
-        logger.info('List users.')
-        return success(data=user_service.find_by_id(id))
-
-    def post(self, id):
-        logger.info('Add user.')
-        return success(data=user_service.add(id))
-
-    def delete(self, id):
-        logger.info('Delete user.')
-        user_service.delete(id)
-        return success()
+@api.route('/list')
+def list_user():
+    logger.info('List users.')
+    return success(data=user_service.find_list())
 
 
-@user_api.route('/username/<string:username>')
-@user_api.param('username')
-class UserNameApi(Resource):
-    def get(self, username):
-        logger.info('List users.')
-        return success(data=user_service.find_by_username(username))
+@api.route('/<string:id>')
+def find_by_id(id):
+    logger.info('List users.')
+    return success(data=user_service.find_by_id(id))
+
+
+@api.route('/<string:id>')
+def add_one(id):
+    logger.info('Add user.')
+    return success(data=user_service.add(id))
+
+
+@api.route('/<string:id>')
+def delete_one(id):
+    logger.info('Delete user.')
+    user_service.delete(id)
+    return success()
+
+
+@api.route('/username/<string:username>')
+def find_by_username(username):
+    logger.info('List users.')
+    return success(data=user_service.find_by_username(username))

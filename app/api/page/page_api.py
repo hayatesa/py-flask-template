@@ -1,9 +1,9 @@
 from jinja2 import TemplateNotFound
-from . import page_bp
 from flask import send_file
+from . import page_bp as api
 
 
-@page_bp.route('/<page_name>.html', methods=['GET'])
+@api.route('/<page_name>.html', methods=['GET'])
 def page(page_name):
     try:
         return send(page_name + '.html')
@@ -13,7 +13,7 @@ def page(page_name):
         return send('404.html')
 
 
-@page_bp.route('/', methods=['GET'])
+@api.route('/', methods=['GET'])
 def index():
     return send('index.html')
 
