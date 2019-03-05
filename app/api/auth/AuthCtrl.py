@@ -5,7 +5,7 @@ from app.exception.AuthException import AuthException
 from app.service.UserService import user_service
 from app.util.Resp import success
 from app.util import JwtUtils
-from app.auth import basic_auth, token_auth
+from app.security import basic_auth, token_auth
 
 auth_api = Namespace('token', description='Token API')
 

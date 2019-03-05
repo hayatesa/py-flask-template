@@ -7,7 +7,7 @@ user_api = Namespace('user', description='User API')
 
 
 @user_api.route('/list')
-class UserApi(Resource):
+class UserListApi(Resource):
     def get(self):
         logger.info('List users.')
         return success(data=user_service.find_list())
@@ -32,7 +32,7 @@ class UserApi(Resource):
 
 @user_api.route('/username/<string:username>')
 @user_api.param('username')
-class UserApi(Resource):
+class UserNameApi(Resource):
     def get(self, username):
         logger.info('List users.')
         return success(data=user_service.find_by_username(username))

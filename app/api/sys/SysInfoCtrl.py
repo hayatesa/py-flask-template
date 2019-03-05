@@ -1,6 +1,6 @@
 from flask_restplus import Resource, Namespace
 
-from app.auth import token_auth
+from app.security import token_auth
 from app.util import SysUtils
 from app.api import version
 from app.util.Resp import success
