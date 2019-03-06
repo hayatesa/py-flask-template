@@ -1,4 +1,4 @@
-version: &v 1.4.0.0305_base
+version: &version 1.4.0.0305_base
 profile: local
 server:
   static_folder: templates
@@ -7,7 +7,6 @@ server:
     allow: true
     origins: '*'
     path: /api/*
-
 sqlalchemy:
   SQLALCHEMY_DATABASE_URI: mysql://dev:dev@119.29.94.246:3306/test_db?charset=utf8
   SQLALCHEMY_TRACK_MODIFICATIONS: true
@@ -38,7 +37,7 @@ swagger:
       email: hayatesa@live.cn
       url: &link https://github.com/hayatesa
     termsOfService: *link # Just a link
-    version: *v
+    version: *version
   uiversion: 3  # [2|3]
 
 log: # See https://docs.python.org/3/library/logging.config.html
