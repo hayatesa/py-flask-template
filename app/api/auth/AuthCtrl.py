@@ -11,25 +11,28 @@ from . import auth_bp as api
 
 @api.route('/token', methods=['POST'])
 @basic_auth.login_required
-@swag_from('%s/docs/auth.yml' % RESOURCES_PATH)
 def token():
     username_auth = request.authorization.get('username') if request.authorization else None
     user = user_service.find_by_username(username_auth or request.json['username'])
     return success(data=JwtUtils.encode_auth_token(user.id, user.username))
 
 
-@swag_from('%s/docs/auth.yml' % RESOURCES_PATH)
+@api.route('/logout', methods=['POST'])
+def logout():
+    return success()
+
+
 @api.route('/test/identify', methods=['GET'])
 @token_auth.login_required
 def test_identify():
     return success()
 
 
-@swag_from('%s/docs/auth.yml' % RESOURCES_PATH)
 @api.route('/test/error', methods=['GET'])
 @token_auth.login_required
 def test_error():
     raise Exception()
+
 
 @swag_from('%s/docs/auth.yml' % RESOURCES_PATH)
 @api.route('/test/exception', methods=['GET'])
