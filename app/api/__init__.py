@@ -1,6 +1,7 @@
 from app.exception.LoginException import LoginException
 from app.exception.AuthException import AuthException
 from app import app, APPLICATION_CONFIG
+from app.exception.TokenException import TokenException
 from app.util.Resp import failure
 
 context_path = APPLICATION_CONFIG['server'].get('context_path', '')
@@ -40,6 +41,11 @@ def internal_server_error(error):
 @app.errorhandler(AuthException)
 def auth_exception(e):
     return failure(message=e.message)
+
+
+@app.errorhandler(TokenException)
+def token_exception(e):
+    return failure(message=e.message, status_code=401)
 
 
 @app.errorhandler(LoginException)

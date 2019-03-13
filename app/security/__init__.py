@@ -43,12 +43,10 @@ def verify_password(username, password):
 def verify_token(token):
     if not token:
         abort(401, **{'description': '禁止访问: 令牌缺失'})
-    try:
-        payload = JwtUtils.decode_auth_token(token)
-        if not JwtUtils.is_valid_token(payload):
-            raise TokenException('禁止访问: 令牌无效')
-        if JwtUtils.is_token_expired(payload['exp']):
-            abort(401, **{'description': '禁止访问: 令牌过期'})
-    except TokenException as e:
-        abort(401, **{'description': e.message})
+
+    payload = JwtUtils.decode_auth_token(token)
+    if not JwtUtils.is_valid_token(payload):
+        raise TokenException('禁止访问: 令牌无效')
+    if JwtUtils.is_token_expired(payload['exp']):
+        abort(401, **{'description': '禁止访问: 令牌过期'})
     return True
