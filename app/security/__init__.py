@@ -25,15 +25,15 @@ def verify_password(username, password):
     _username = username or data.get('username')
     _password = password or data.get('password')
     if not _username:
-        raise LoginException(message='认证失败: 请提供用户名')
+        raise LoginException(message='请提供用户名')
     if not _password:
-        raise LoginException(message='认证失败: 请提供密码')
+        raise LoginException(message='请提供密码')
 
     user_info = user_service.find_by_username(_username)
     if not user_info:
-        raise LoginException(message='认证失败: 用户不存在')
+        raise LoginException(message='用户不存在')
     if not check_password_hash(user_info.password, _password):
-        raise LoginException(message='认证失败: 密码错误')
+        raise LoginException(message='密码错误')
     user_info.lastAccessTime = datetime.datetime.now()
     user_service.update(user_info)
     return True
@@ -42,11 +42,11 @@ def verify_password(username, password):
 @token_auth.verify_token
 def verify_token(token):
     if not token:
-        abort(401, **{'description': '禁止访问: 令牌缺失'})
+        abort(401, **{'description': '令牌缺失'})
 
     payload = JwtUtils.decode_auth_token(token)
     if not JwtUtils.is_valid_token(payload):
-        raise TokenException('禁止访问: 令牌无效')
+        raise TokenException('令牌无效')
     if JwtUtils.is_token_expired(payload['exp']):
-        abort(401, **{'description': '禁止访问: 令牌过期'})
+        abort(401, **{'description': '令牌过期'})
     return True
