@@ -18,6 +18,7 @@ sqlalchemy:
 #  SQLALCHEMY_POOL_RECYCLE:
 #  SQLALCHEMY_MAX_OVERFLOW:
 jwt:
+  header_key: Authorization
   secret_key: ft@4&iP!_  # Token密钥
   ttl: 86400  # Token有效期(单位: 秒)
   algorithm: HS256  # Token加密算法

@@ -1,3 +1,4 @@
+from app.exception.LoginException import LoginException
 from app.exception.AuthException import AuthException
 from app import app, APPLICATION_CONFIG
 from app.util.Resp import failure
@@ -7,17 +8,17 @@ version = APPLICATION_CONFIG.get('version')
 
 
 @app.errorhandler(400)
-def not_found(error):
+def bad_request(error):
     return failure(message=error.description, status_code=error.code)
 
 
 @app.errorhandler(401)
-def not_found(error):
+def unauthorized(error):
     return failure(message=error.description, status_code=error.code)
 
 
 @app.errorhandler(403)
-def not_found(error):
+def forbidden(error):
     return failure(message=error.description, status_code=error.code)
 
 
@@ -27,20 +28,25 @@ def not_found(error):
 
 
 @app.errorhandler(405)
-def not_found(error):
+def method_not_allowed(error):
     return failure(message=error.description, status_code=error.code)
 
 
 @app.errorhandler(500)
-def not_found(error):
+def internal_server_error(error):
     return failure(message=error.description, status_code=error.code)
 
 
 @app.errorhandler(AuthException)
-def not_found(e):
+def auth_exception(e):
     return failure(message=e.message)
 
 
-# @app.errorhandler(Exception)
-# def not_found(e):
-#     return failure(message=e.msg, status_code=500)
+@app.errorhandler(LoginException)
+def login_exception(e):
+    return failure(message=e.message)
+
+
+@app.errorhandler(Exception)
+def exception(e):
+    return failure(message=e.msg, status_code=500)

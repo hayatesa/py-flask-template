@@ -6,6 +6,8 @@ class User(db.Model):
     id = db.Column('id', db.String(32), primary_key=True)
     username = db.Column('username', db.String(64))
     password = db.Column('password', db.String(128))
+    name = db.Column('name', db.String(128))
+    avatar = db.Column('avatar', db.String(128))
     lastAccessTime = db.Column('last_access_time', db.DateTime)
     createTime = db.Column('create_time', db.DateTime)
     isDeleted = db.Column('is_deleted', db.Boolean)
