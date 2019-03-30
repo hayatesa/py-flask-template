@@ -1,10 +1,7 @@
-from app.mixin.ConvertMixin import ConvertMixin
+class UserVO:
 
-
-class UserVO(ConvertMixin):
-
-    def __init__(self, id, username, name, avatar,last_access_time):
-        self.id = id
+    def __init__(self, user_id, username, name, avatar, last_access_time):
+        self.id = user_id
         self.username = username
         self.name = name
         self.avatar = avatar

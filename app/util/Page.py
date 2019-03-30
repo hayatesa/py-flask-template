@@ -7,8 +7,6 @@ class Page:
         :param total_page: 总页数
         :param page_num: 当前页
         :param rows: 数据
-        :param prevPage: 上一页页码
-        :param nextPage: 下一页页码
         """
         self.total = total
         self.pageSize = page_size
