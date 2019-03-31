@@ -1,58 +1,103 @@
-from app.exception.LoginException import LoginException
-from app.exception.AuthException import AuthException
+# -*- coding: utf-8 -*-
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from flask import request, abort
 from app import app, APPLICATION_CONFIG
-from app.exception.TokenException import TokenException
-from app.util.Resp import failure
+from app.util.resp import failure
+from app.exception import AuthenticationException, AuthorizationException, BusinessException, InternalException
+from app.util import jwt_util
+from app.service.authentication_srv import verify_password as verify_pwd
+
+basic_auth = HTTPBasicAuth()
+token_auth = HTTPTokenAuth()
 
 context_path = APPLICATION_CONFIG['server'].get('context_path', '')
 version = APPLICATION_CONFIG.get('version')
 
 
+# 登录认证
+@basic_auth.verify_password
+def verify_password(username, password):
+    """
+    验证用户名密码
+    :param username:  用户名 来自URL组件或POST请求参数
+    :param password: 密码 来自URL组件或POST请求参数
+    :return: boolean
+    """
+    data = request.json
+    _username = username or data.get('username')
+    _password = password or data.get('password')
+    if not _username:
+        raise BusinessException(message='请提供用户名')
+    if not _password:
+        raise BusinessException(message='请提供密码')
+    return verify_pwd(_username, _password)
+
+
+@token_auth.verify_token
+def verify_token(token):
+    if not token:
+        abort(401, **{'description': '令牌缺失'})
+
+    payload = jwt_util.decode_auth_token(token)
+    if not jwt_util.is_valid_token(payload):
+        raise BusinessException('令牌无效')
+    if jwt_util.is_token_expired(payload['exp']):
+        abort(401, **{'description': '令牌过期'})
+    return True
+
+
+# 全局异常处理
 @app.errorhandler(400)
 def bad_request(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
 @app.errorhandler(401)
 def unauthorized(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
 @app.errorhandler(403)
 def forbidden(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
 @app.errorhandler(404)
 def not_found(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
 @app.errorhandler(405)
 def method_not_allowed(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return failure(message=error.description, status_code=error.code)
+    return failure(message=error.description, http_status_code=error.code)
 
 
-@app.errorhandler(AuthException)
-def auth_exception(e):
-    return failure(message=e.message)
+@app.errorhandler(AuthenticationException)
+def authentication_exception_handler(e):
+    return failure(message=e.message, http_status_code=401)
 
 
-@app.errorhandler(TokenException)
-def token_exception(e):
-    return failure(message=e.message, status_code=401)
+@app.errorhandler(AuthorizationException)
+def authorization_exception_handler(e):
+    return failure(message=e.message, http_status_code=403)
 
 
-@app.errorhandler(LoginException)
-def login_exception(e):
-    return failure(message=e.message)
+@app.errorhandler(BusinessException)
+def business_exception_handler(e):
+    return failure(status=e.status, message=e.message)
+
+
+@app.errorhandler(InternalException)
+def internal_exception_handler():
+    return failure(message='Internal Error.', http_status_code=500)
 
 
 @app.errorhandler(Exception)
-def exception(e):
-    return failure(message=e.msg, status_code=500)
+def exception_handler(e):
+    print(e)
+    return failure(message='Unknown Error.', http_status_code=500)

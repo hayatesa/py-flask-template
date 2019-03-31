@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from jinja2 import TemplateNotFound
 from flask import send_file
-from . import page_bp as api
+from app.api.page import page_bp as api
 
 
 @api.route('/<page_name>.html', methods=['GET'])

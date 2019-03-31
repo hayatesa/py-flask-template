@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Page:
 
     def __init__(self, total, page_size, total_page, page_num, rows):

@@ -1,20 +1,22 @@
+# -*- coding: utf-8 -*-
 from flasgger import swag_from
 from flask import request
-from app.exception.AuthException import AuthException
-from app.service.UserService import user_service
-from app.util.Resp import success
-from app.util import JwtUtils
-from app.security import basic_auth, token_auth
+from app.exception import AuthorizationException
+from app.service import user_srv
+from app.util.resp import success
+from app.util import jwt_util
+from app.api import basic_auth, token_auth
 from app import RESOURCES_PATH
-from . import auth_bp as api
+
+from app.api.auth import auth_bp as api
 
 
 @api.route('/token', methods=['POST'])
 @basic_auth.login_required
 def token():
     username_auth = request.authorization.get('username') if request.authorization else None
-    user = user_service.find_by_username(username_auth or request.json['username'])
-    return success(data=JwtUtils.encode_auth_token(user.id, user.username))
+    user = user_srv.find_by_username(username_auth or request.json['username'])
+    return success(data=jwt_util.encode_auth_token(user.id, user.username))
 
 
 @api.route('/logout', methods=['POST'])
@@ -38,4 +40,4 @@ def test_error():
 @api.route('/test/exception', methods=['GET'])
 @token_auth.login_required
 def test_exception():
-    raise AuthException('无权限')
+    raise AuthorizationException('无权限')

@@ -1,13 +1,13 @@
-from app.util.Resp import success
+# -*- coding: utf-8 -*-
+from app.util.resp import success
 from app import logger
-from app.service.UserService import user_service
-from . import user_bp as api
-from app.vo.UserVO import UserVO
-from app.util.JwtUtils import decode_auth_token
-from app.security import token_auth
+from app.service.user_srv import user_service
+from app.api.user import user_bp as api
+from app.vo.user_vo import UserVO
+from app.util.jwt_util import decode_auth_token
+from app.api import token_auth
 from app import APPLICATION_CONFIG
 from flask import request
-from app.exception.LoginException import LoginException
 
 
 @api.route('/list', methods=['GET'])

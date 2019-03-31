@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class PageForm:
 
     def __init__(self, page_num=1, page_size=10, sort_by=None, order='ASC', keyword=None, search_by=None):

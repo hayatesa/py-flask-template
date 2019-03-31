@@ -70,3 +70,9 @@ log: # See https://docs.python.org/3/library/logging.config.html
       level: 10
   disable_existing_loggers: true
   version: 1  # 默认且只能为1
+
+redis:
+  host: 119.29.94.246
+  port: 6379
+  decode_responses: true # 解码为字符串
+  password: redis272243

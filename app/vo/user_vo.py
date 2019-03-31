@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class UserVO:
 
     def __init__(self, user_id, username, name, avatar, last_access_time):

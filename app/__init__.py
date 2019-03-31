@@ -1,3 +1,4 @@
+# -*-coding:utf-8 -*-
 from flasgger import Swagger
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -22,7 +23,7 @@ CONFIG_FILE_PATH = os.path.join(RESOURCES_PATH, '%s/%s%s' % (CONF_FILE_INFO['pat
 BANNER_PATH = os.path.join(RESOURCES_PATH, 'banner.txt')  # banner路径
 
 
-def __load_config__():
+def _load_config():
     app_config = {}
     _logger = logging.getLogger()
     _logger.setLevel(logging.DEBUG)
@@ -59,7 +60,7 @@ def __load_config__():
     return app_config
 
 
-def __create_logger__():
+def _create_logger():
     log_conf = APPLICATION_CONFIG.get('log')
     if not log_conf:
         return logging.getLogger()
@@ -69,20 +70,20 @@ def __create_logger__():
     return _app_logger
 
 
-def __create_swagger__(flask_app):
+def _create_swagger(flask_app):
     swagger_config = APPLICATION_CONFIG.get('swagger')
     if not swagger_config:
         return None
     return Swagger(flask_app, config=swagger_config)
 
 
-def __create_db__(flask_app):
+def _create_db(flask_app):
     _db = SQLAlchemy()
     _db.init_app(flask_app)
     return _db
 
 
-def __create_app__():
+def _create_app__():
     flask_app = Flask(__name__, static_folder=os.path.join(
         CONTEXT_PATH,
         APPLICATION_CONFIG['server'].get('static_folder', 'templates')
@@ -101,18 +102,12 @@ def __init_cors__(flask_app):
          resources={path: {"origins": origins}})
 
 
-def __assemble_blueprint__(flask_app):
+def _assemble_blueprint(flask_app):
     from app.api.auth import auth_bp
-    from app.api.sys import sys_bp
-    from app.api.user import user_bp
-    from app.api.page import page_bp
     flask_app.register_blueprint(auth_bp)
-    flask_app.register_blueprint(sys_bp)
-    flask_app.register_blueprint(user_bp)
-    flask_app.register_blueprint(page_bp)
 
 
-def message():
+def _message():
     if os.path.exists(BANNER_PATH):
         logger.info('Load banner.txt from %s' % BANNER_PATH)
         with open(BANNER_PATH, encoding='UTF-8') as f:
@@ -120,12 +115,12 @@ def message():
     logger.info('Application launched in %.2f Seconds.' % (end_time - start_time))
 
 
-APPLICATION_CONFIG = __load_config__()
-logger = __create_logger__()
-app = __create_app__()
-swagger = __create_swagger__(app)
-db = __create_db__(app)
-__assemble_blueprint__(app)
+APPLICATION_CONFIG = _load_config()
+logger = _create_logger()
+app = _create_app__()
+swagger = _create_swagger(app)
+db = _create_db(app)
+_assemble_blueprint(app)
 
 end_time = time.time()
-message()
+_message()

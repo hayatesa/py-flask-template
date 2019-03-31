@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import jwt
 import datetime
 import time
-from app.exception.TokenException import TokenException
 from app import APPLICATION_CONFIG
+from app.exception import InternalException
 
 SECRET_KEY = APPLICATION_CONFIG.get('secret_key', '')
 TTL = APPLICATION_CONFIG['jwt'].get('ttl', 1800)
@@ -39,7 +40,7 @@ def decode_auth_token(auth_token):
     try:
         payload = jwt.decode(token, SECRET_KEY, options={'verify_exp': False})
     except Exception:
-        raise TokenException('Token解析失败')
+        raise InternalException('Token解析失败')
     return payload
 
 
@@ -58,10 +59,10 @@ def extract(token_in_header):
         return token_in_header
 
     if not token_in_header.strip():
-        raise TokenException('Authorization header cannot be blank.')
+        raise InternalException('Authorization header cannot be blank.')
 
     if len(token_in_header) < len(TOKEN_PREFIX):
-        raise TokenException('Invalid authorization header size.')
+        raise InternalException('Invalid authorization header size.')
 
     return token_in_header[len(TOKEN_PREFIX):]
 

@@ -1,8 +1,9 @@
-from app.entity.User import User
-from .BaseDAO import BaseDAO
+# -*- coding: utf-8 -*-
+from app.entity.user import User
+from app.dao.base_dao import BaseDAO
 
 
-class UserDAO(BaseDAO):
+class UserDao(BaseDAO):
 
     def __init__(self):
         super().__init__(User)
@@ -11,4 +12,5 @@ class UserDAO(BaseDAO):
         return User.query.filter(User.username == username, User.isDeleted == False).all()
 
 
-user_dao = UserDAO()
+user_dao = UserDao()
+del UserDao  # 单例模式，删除构函数
