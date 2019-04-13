@@ -103,8 +103,8 @@ def __init_cors__(flask_app):
 
 
 def _assemble_blueprint(flask_app):
-    from app.api.auth import auth_bp
-    flask_app.register_blueprint(auth_bp)
+    from app.api.user import user_bp
+    flask_app.register_blueprint(user_bp)
 
 
 def _message():
